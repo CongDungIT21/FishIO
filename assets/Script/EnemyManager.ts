@@ -48,7 +48,7 @@ export default class EnemyManager extends cc.Component {
 
     update(dt: number) {
         this.timeCounter += dt;
-        if(this.timeCounter >= this.timeDelay && this.numberEnemy < 0) 
+        if(this.timeCounter >= this.timeDelay && this.numberEnemy < 10) 
         { 
             this.timeCounter = 0;
             this.createrNewEnemy();

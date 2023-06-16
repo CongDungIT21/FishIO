@@ -147,56 +147,47 @@ export default class Enemy extends cc.Component {
         return angle;
     }
 
-    rotationTween(angle: number, duration: number) {
-        // cc.tween(this.node)
-        //     .to(duration, {angle: angle}, {easing: "linear"})
-        //     .call(() => {
-        //         if(0 <= angle && angle < 90) {
-        //             // this.node.angle = angle;
-        //             this.node.scaleX = 1;
-        //             this.node.scaleY = 1;
-        //         }
-        //         else if(90 <= angle && angle < 180) {
-        //             // this.node.angle = angle;
-        //             this.node.scaleX = 1;
-        //             this.node.scaleY = -1;
-        //         }
-        //         else if(0 >= angle && angle > -90) {
-        //             // this.node.angle = angle;
-        //             this.node.scaleX = 1;
-        //             this.node.scaleY = 1;
-        //         }
-        //         else if(-90 >= angle && angle > -180) {
-        //             // this.node.angle = angle;
-        //             this.node.scaleX = 1;
-        //             this.node.scaleY = -1;
-        //         }
-        //     })
-        //     .start();  
-        
+    rotationTween(angle: number, duration: number) {  
         if(0 <= angle && angle < 90) {
+            // cc.tween(this.node)
+            // .to(duration, {scaleX: 1, scaleY: 1, angle: this.node.angle + angle * duration})
+            // .start()
+
             // this.node.angle = angle;
-            this.node.scaleX = 1;
+            // this.node.scaleX = 1;
             this.node.scaleY = 1;
         }
         else if(90 <= angle && angle < 180) {
             // this.node.angle = angle;
-            this.node.scaleX = 1;
+            // this.node.scaleX = 1;
             this.node.scaleY = -1;
+
+            // cc.tween(this.node)
+            // .to(duration, {scaleX: 1, scaleY: -1, angle: this.node.angle + angle * duration})
+            // .start()            
         }
         else if(0 >= angle && angle > -90) {
             // this.node.angle = angle;
-            this.node.scaleX = 1;
+            // this.node.scaleX = 1;
             this.node.scaleY = 1;
+
+            // cc.tween(this.node)
+            // .to(duration, {scaleX: 1, scaleY: 1, angle: this.node.angle + angle * duration})
+            // .start()
         }
         else if(-90 >= angle && angle > -180) {
             // this.node.angle = angle;
-            this.node.scaleX = 1;
+            // this.node.scaleX = 1;
             this.node.scaleY = -1;
+
+            // cc.tween(this.node)
+            // .to(duration, {scaleX: 1, scaleY: -1, angle: angle})
+            // .start()
         }
 
+        // angle = this.node.angle + angle * duration;
+        
         this.node.angle = angle;
-        console.log("angle: ", angle);
     }
 
 
