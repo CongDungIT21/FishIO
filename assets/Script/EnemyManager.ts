@@ -30,6 +30,9 @@ export default class EnemyManager extends cc.Component {
     @property(cc.Node)
     player: cc.Node = null;
 
+    @property(cc.Prefab)
+    cutting: cc.Prefab = null;
+
     private timeDelay: number = 2;
     private timeCounter: number = 0;
     private numberEnemy: number = 0;
@@ -78,5 +81,12 @@ export default class EnemyManager extends cc.Component {
 
     getPlayer() {
         return this.player;
+    }
+
+    onDead(position: cc.Vec2) {
+        let cutting = cc.instantiate(this.cutting);
+        this.enemyHolder.addChild(cutting);
+        cutting.setPosition(position);
+        console.log(cutting.getPosition());
     }
 }

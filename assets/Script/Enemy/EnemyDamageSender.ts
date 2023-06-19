@@ -7,6 +7,7 @@
 
 import { TypeCollision } from "../CollisionTag";
 import DamageSender from "../Damage/DamageSender";
+import EnemyManager from "../EnemyManager";
 import Enemy from "./Enemy";
 
 const {ccclass, property} = cc._decorator;
@@ -24,7 +25,7 @@ export default class EnemyDamageSender extends DamageSender {
 
     onCollisionEnter(other: cc.Collider, self: cc.Collider): void {
         if(other.tag === TypeCollision.WEAPON_PLAYER) {
-            this.node.parent.destroy();
+            this.handleStateDead();
         }
     }
     onCollisionStay(other: cc.Collider, self: cc.Collider): void {
@@ -32,5 +33,10 @@ export default class EnemyDamageSender extends DamageSender {
     }
     onCollisionExit(other: cc.Collider, self: cc.Collider): void {
         // console.log("onCollisionExit EnemyDamageSender");
+    }
+
+    handleStateDead(): void {
+        EnemyManager.instance.onDead(this.node.parent.getPosition());
+        this.node.parent.destroy();
     }
 }

@@ -8,4 +8,6 @@ export enum TypeCollision {
     WEAPON_PLAYER = 22,
     RADIUS_PLAYER = 23,
     RADIUS_TRAKING_PLAYER = 24,
+
+    RADIUS_CUTTING = 30,
 }

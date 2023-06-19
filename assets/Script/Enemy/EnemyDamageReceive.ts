@@ -6,7 +6,9 @@
 //  - https://docs.cocos.com/creator/manual/en/scripting/life-cycle-callbacks.html
 
 import { TypeCollision } from "../CollisionTag";
+import ConvertExtension from "../ConvertExtension";
 import DamageReceive from "../Damage/DamageReceive";
+import EnemyManager from "../EnemyManager";
 import Enemy from "./Enemy";
 
 const {ccclass, property} = cc._decorator;
@@ -39,6 +41,7 @@ export default class EnemyDamageReceive extends DamageReceive {
         return true;
     }
     handleStateDead(): void {
+        EnemyManager.instance.onDead(this.node.parent.getPosition());
         this.node.parent.destroy();
     }
 }

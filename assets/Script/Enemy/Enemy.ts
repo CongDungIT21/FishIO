@@ -27,6 +27,9 @@ export default class Enemy extends cc.Component {
     private timeStopTracking: number = 0;
 
     private tweenRotation: any; 
+
+    private normalize: cc.Vec2;
+
     onLoad() {
         this.clampHorizontal = new cc.Vec2(-0.5, 0.5).mul(screen.width);
         this.clampVertical = new cc.Vec2(-0.5, 0.5).mul(screen.height);
@@ -74,7 +77,8 @@ export default class Enemy extends cc.Component {
     }
 
     movingToVisible(dt: number, pos: cc.Vec2) {
-        let normalized = pos.sub(this.node.getPosition()).normalize();                
+        let normalized = pos.sub(this.node.getPosition()).normalize();          
+        this.normalize = normalized;      
         let offsetX = this.node.x + this.speed * normalized.x * dt;
         let offsetY = this.node.y + this.speed * normalized.y * dt; 
         
@@ -83,6 +87,7 @@ export default class Enemy extends cc.Component {
 
         let angle = this.rotationNodeWithNormalize(normalized);
         this.rotationTween(angle, dt);
+        // normalized.rotateSelf(this.node.angle * Math.PI / 180);
 
         const epsilon = 1; // Độ sai số cho phép ~ Độ dài 1 của normalized
 
@@ -98,7 +103,8 @@ export default class Enemy extends cc.Component {
     }
 
     movingToPoint(dt: number, pos: cc.Vec2) {
-        let normalized = pos.sub(this.node.getPosition()).normalize();        
+        let normalized = pos.sub(this.node.getPosition()).normalize();     
+        this.normalize = normalized;   
         let offsetX = this.node.x + this.speed * normalized.x * dt;
         let offsetY = this.node.y + this.speed * normalized.y * dt; 
         
@@ -107,6 +113,7 @@ export default class Enemy extends cc.Component {
 
         let angle = this.rotationNodeWithNormalize(normalized);
         this.rotationTween(angle, dt);
+        // normalized.rotateSelf(this.node.angle * Math.PI / 180);
 
         const epsilon = 60; // Độ sai số cho phép  ~ Độ dài 1 của normalized
         if (Math.abs(this.node.x - pos.x) < epsilon && Math.abs(this.node.y - pos.y) < epsilon) {
@@ -124,7 +131,8 @@ export default class Enemy extends cc.Component {
     }
 
     movingToPlayer(dt: number, pos: cc.Vec2) {
-        let normalized = pos.sub(this.node.getPosition()).normalize();        
+        let normalized = pos.sub(this.node.getPosition()).normalize();      
+        this.normalize = normalized;
         let offsetX = this.node.x + this.speed * normalized.x * dt;
         let offsetY = this.node.y + this.speed * normalized.y * dt; 
         
@@ -133,6 +141,7 @@ export default class Enemy extends cc.Component {
 
         let angle = this.rotationNodeWithNormalize(normalized);
         this.rotationTween(angle, dt);
+    //    normalized.rotateSelf(this.node.angle * Math.PI / 180);
 
         //Mul21: khi player bị giết bởi 1 enemy khác trong khi enemy này vẫn đang ở stay
         const epsilon = 1;
@@ -154,12 +163,12 @@ export default class Enemy extends cc.Component {
             // .start()
 
             // this.node.angle = angle;
-            // this.node.scaleX = 1;
+            this.node.scaleX = 1;
             this.node.scaleY = 1;
         }
         else if(90 <= angle && angle < 180) {
             // this.node.angle = angle;
-            // this.node.scaleX = 1;
+            this.node.scaleX = 1;
             this.node.scaleY = -1;
 
             // cc.tween(this.node)
@@ -168,7 +177,7 @@ export default class Enemy extends cc.Component {
         }
         else if(0 >= angle && angle > -90) {
             // this.node.angle = angle;
-            // this.node.scaleX = 1;
+            this.node.scaleX = 1;
             this.node.scaleY = 1;
 
             // cc.tween(this.node)
@@ -177,17 +186,44 @@ export default class Enemy extends cc.Component {
         }
         else if(-90 >= angle && angle > -180) {
             // this.node.angle = angle;
-            // this.node.scaleX = 1;
+            this.node.scaleX = 1;
             this.node.scaleY = -1;
 
             // cc.tween(this.node)
             // .to(duration, {scaleX: 1, scaleY: -1, angle: angle})
             // .start()
         }
-
-        // angle = this.node.angle + angle * duration;
         
         this.node.angle = angle;
+
+        // let newAng = this.node.angle + (angle - this.node.angle) * duration;
+        // let offsetRotaiton = 0;
+        // if(newAng >= 180 && newAng <= -180) {
+        //     offsetRotaiton = (360 - newAng);
+        // }
+        // else {
+        //     offsetRotaiton = newAng;
+        // }
+
+        // offsetRotaiton = cc.misc.clampf(this.node.angle + offsetRotaiton, 0, angle);
+        // this.node.angle = newAng;
+
+        // if(0 <= this.node.angle && this.node.angle < 90) {
+        //     this.node.scaleX = 1;
+        //     this.node.scaleY = 1;
+        // }
+        // else if(90 <= this.node.angle && this.node.angle < 180) {
+        //     this.node.scaleX = 1;
+        //     this.node.scaleY = -1;        
+        // }
+        // else if(0 >= this.node.angle && this.node.angle > -90) {
+        //     this.node.scaleX = 1;
+        //     this.node.scaleY = 1;
+        // }
+        // else if(-90 >= this.node.angle && this.node.angle > -180) {
+        //     this.node.scaleX = 1;
+        //     this.node.scaleY = -1;
+        // }
     }
 
 
@@ -218,4 +254,32 @@ export default class Enemy extends cc.Component {
     onCollisionExit(other: cc.Collider, self: cc.Collider): void {
         // console.log("onCollisionEnter EnemyDamageReceive");
     }
+
+    // protected lateUpdate(dt: number): void {
+    //     if(true)
+    //     {
+    //         let angle = this.rotationNodeWithNormalize(this.normalize);
+    //        if(0 <= angle && angle < 90) {
+    //             // this.node.angle = angle;
+    //             this.node.scaleX = 1;
+    //             this.node.scaleY = 1;
+    //         }
+    //         else if(90 <= angle && angle < 180) {
+    //             // this.node.angle = angle;
+    //             this.node.scaleX = 1;
+    //             this.node.scaleY = -1;
+    //         }
+    //         else if(0 >= angle && angle > -90) {
+    //             // this.node.angle = angle;
+    //             this.node.scaleX = 1;
+    //             this.node.scaleY = 1;
+    //         }
+    //         else if(-90 >= angle && angle > -180) {
+    //             // this.node.angle = angle;
+    //             this.node.scaleX = 1;
+    //             this.node.scaleY = -1;
+    //         }
+    //         this.node.angle = angle;
+    //     }
+    // }
 }
